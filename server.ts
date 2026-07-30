@@ -2,11 +2,21 @@ import express from "express";
 import path from "path";
 import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
+import multer from "multer";
+import fs from "fs";
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json({ limit: "10mb" }));
+
+// Ensure upload directory exists
+const uploadDir = path.join(process.cwd(), "public/uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const upload = multer({ dest: uploadDir });
 
 // In-memory data store for standalone execution (with seed data)
 interface AppUser {
@@ -714,12 +724,19 @@ apiRouter.get("/admin/stats", requireAdmin, (req, res) => {
   });
 });
 
+// Upload Route
+app.post("/api/upload", upload.single("image"), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: "No file" });
+  res.json({ path: req.file.filename, publicUrl: `/uploads/${req.file.filename}` });
+});
+
 // Mount router under both /api and /functions/v1/api for full compatibility
 app.use("/api", apiRouter);
 app.use("/functions/v1/api", apiRouter);
 
 // Start Server with Vite Middleware in Development
 async function startServer() {
+  app.use("/uploads", express.static(path.join(process.cwd(), "public/uploads")));
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },

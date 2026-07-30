@@ -1,4 +1,4 @@
-import { useState, useRef, type ChangeEvent } from "react";
+import { useState, useRef, useEffect, type ChangeEvent } from "react";
 import { Upload, Camera, X, ImageIcon, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { compressAndUploadImage } from "../../lib/imageUpload";
@@ -18,6 +18,14 @@ export default function ImageUpload({ deviceId, value, onChange, max = 3 }: Imag
   const [uploading, setUploading] = useState(false);
   const [previews, setPreviews] = useState<string[]>([]);
   const [paths, setPaths] = useState<string[]>(value);
+
+  // Sync previews when value changes (e.g. initial load)
+  useEffect(() => {
+    if (value.length !== previews.length) {
+      setPreviews(value.map(p => p.startsWith('/') ? p : `/uploads/${p}`));
+      setPaths(value);
+    }
+  }, [value]);
 
   const slots = Math.max(max, value.length);
   const canAdd = paths.length < max;

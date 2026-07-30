@@ -6,6 +6,7 @@ import Layout from "../components/ui/Layout";
 import BackButton from "../components/ui/BackButton";
 import DeviceForm from "../components/ui/DeviceForm";
 import QRCodeDisplay from "../components/ui/QRCodeDisplay";
+import { getDeviceImageUrl } from "../lib/imageUpload";
 import { api } from "../lib/api";
 import { toast } from "../components/ui/Toast";
 import type { Device } from "../types";
@@ -46,25 +47,32 @@ export default function RegisterDevice() {
 
             <div className="flex flex-col items-center mb-6">
               <QRCodeDisplay value={created.qr_token} fileName={`guardian-${created.serial_number || created.id.slice(0, 8)}`} />
+              {created.image_paths && created.image_paths.length > 0 && (
+                <div className="flex gap-2 mt-4">
+                  {created.image_paths.map((path, idx) => (
+                    <img key={idx} src={getDeviceImageUrl(path) || ""} alt={`Device ${idx}`} className="w-16 h-16 rounded-lg object-cover border border-neutral-200 dark:border-neutral-700" />
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="bg-neutral-50 rounded-lg p-4 mb-6">
+            <div className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-4 mb-6">
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">{t("verify.owner")}</p>
-                  <p className="font-medium text-neutral-900 dark:text-neutral-100">{created.owner_name}</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-300">{t("verify.owner")}</p>
+                  <p className="font-semibold text-neutral-950 dark:text-neutral-50">{created.owner_name}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">{t("verify.brandModel")}</p>
-                  <p className="font-medium text-neutral-900 dark:text-neutral-100">{created.brand} {created.model}</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-300">{t("verify.brandModel")}</p>
+                  <p className="font-semibold text-neutral-950 dark:text-neutral-50">{created.brand} {created.model}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">{t("verify.serial")}</p>
-                  <p className="font-medium text-neutral-900 dark:text-neutral-100 font-mono">{created.serial_number}</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-300">{t("verify.serial")}</p>
+                  <p className="font-semibold text-neutral-950 dark:text-neutral-50 font-mono">{created.serial_number}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">{t("verify.status")}</p>
-                  <p className="font-medium text-neutral-900 dark:text-neutral-100">{t(`status.${created.status}`)}</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-300">{t("verify.status")}</p>
+                  <p className="font-semibold text-neutral-950 dark:text-neutral-50">{t(`status.${created.status}`)}</p>
                 </div>
               </div>
             </div>

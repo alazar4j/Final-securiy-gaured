@@ -2,7 +2,8 @@
   "name": "Guardian Security Device Registration",
   "description": "AI-based guardian security device registration, inspection, QR code verification, and audit tracking system.",
   "requestFramePermissions": [
-    "camera"
+    "camera",
+    "microphone"
   ],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

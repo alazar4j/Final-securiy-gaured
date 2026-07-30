@@ -7,27 +7,30 @@ export async function compressAndUploadImage(
   file: File,
   deviceId: string
 ): Promise<{ path: string; publicUrl: string } | null> {
+  console.log("Compressing image:", file.name, file.type, file.size);
   try {
     const compressed = await imageCompression(file, {
       maxSizeMB: 0.3,
       maxWidthOrHeight: 1024,
-      useWebWorker: true,
+      useWebWorker: false, // Try disabling web worker for debugging
       fileType: "image/jpeg",
     });
+    console.log("Compressed image size:", compressed.size);
 
-    const ext = "jpg";
-    const path = `${deviceId}.${ext}`;
+    const formData = new FormData();
+    formData.append("image", compressed);
 
-    const { error: uploadError } = await supabase.storage
-      .from(BUCKET)
-      .upload(path, compressed, { contentType: "image/jpeg", upsert: true });
-    if (uploadError) {
-      console.error("Upload error:", uploadError.message);
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      console.error("Upload error:", await response.text());
       return null;
     }
 
-    const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-    return { path, publicUrl: data.publicUrl };
+    return await response.json();
   } catch (err) {
     console.error("Image processing error:", err);
     return null;
@@ -37,5 +40,6 @@ export async function compressAndUploadImage(
 export function getDeviceImageUrl(path: string | null): string | null {
   if (!path) return null;
   if (path.startsWith("http")) return path;
-  return supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+  if (path.startsWith("/")) return path;
+  return `/uploads/${path}`;
 }

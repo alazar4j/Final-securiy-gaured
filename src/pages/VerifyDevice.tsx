@@ -188,7 +188,13 @@ export default function VerifyDevice() {
                     </div>
                     <div className="p-5">
                       <div className="grid md:grid-cols-[200px_1fr] gap-5">
-                        {imageUrl ? (
+                        {selected.image_paths && selected.image_paths.length > 0 ? (
+                          <div className="grid grid-cols-2 gap-2">
+                            {selected.image_paths.map((path, idx) => (
+                              <img key={idx} src={getDeviceImageUrl(path) || ""} alt={`Device ${idx}`} className="w-full h-24 object-cover rounded-lg border border-neutral-200 dark:border-neutral-700" />
+                            ))}
+                          </div>
+                        ) : imageUrl ? (
                           <img src={imageUrl} alt={selected.brand} className="w-full h-48 object-cover rounded-lg border border-neutral-200 dark:border-neutral-700" />
                         ) : (
                           <div className="w-full h-48 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">

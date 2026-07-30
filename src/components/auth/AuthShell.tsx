@@ -19,7 +19,7 @@ export default function AuthShell({ children }: { children: ReactNode }) {
         <div className="relative z-10 text-white max-w-md">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-16 h-16 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center p-1.5 ring-1 ring-white/20">
-              <img src="/logo2.png" alt="Selam Security" className="w-full h-full object-contain" />
+              <img src="/logo.png" alt="Selam Security" className="w-full h-full object-contain" />
             </div>
             <div>
               <p className="text-2xl font-bold">{t("app.name")}</p>

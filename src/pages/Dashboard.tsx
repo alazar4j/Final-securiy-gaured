@@ -104,8 +104,8 @@ export default function Dashboard() {
             </div>
             <ArrowRight className="w-5 h-5 text-neutral-300 group-hover:text-accent-500 group-hover:translate-x-1 transition-all" />
           </div>
-          <p className="font-semibold text-neutral-900 dark:text-neutral-100">{t("dashboard.verifyDevice")}</p>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">Scan QR, enter serial, or search by owner name.</p>
+          <p className="font-semibold text-neutral-900 dark:text-neutral-100">{t("verify.scanQr")}</p>
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{t("dashboard.verifyDevice")}</p>
         </Link>
       </div>
     </Layout>

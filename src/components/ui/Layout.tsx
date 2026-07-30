@@ -55,7 +55,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const SidebarContent = (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-3 px-5 py-5 border-b border-neutral-200 dark:border-neutral-800">
-        <img src="/logo2.png" alt="Selam Security" className="w-12 h-12 object-contain" />
+        <img src="/logo.png" alt="Selam Security" className="w-16 h-16 object-contain" />
         <div>
           <p className="text-sm font-bold text-neutral-900 dark:text-neutral-100 leading-tight">{t("app.name")}</p>
           <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-tight">{t("app.tagline")}</p>
@@ -161,7 +161,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               <Menu className="w-6 h-6" />
             </button>
             <div className="lg:hidden flex items-center gap-2">
-              <img src="/logo2.png" alt="Selam Security" className="w-8 h-8 object-contain" />
+            <img src="/logo.png" alt="Selam Security" className="w-12 h-12 object-contain" />
               <span className="font-bold text-base text-neutral-900 dark:text-neutral-100">{t("app.name")}</span>
             </div>
             <div className="hidden lg:block" />
