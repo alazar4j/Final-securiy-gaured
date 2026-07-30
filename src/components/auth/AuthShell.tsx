@@ -7,6 +7,8 @@ import { Moon, Sun, Shield } from "lucide-react";
 export default function AuthShell({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
   const { mode, toggle: toggleTheme } = useThemeStore();
+  const logoSrc = mode === "dark" ? "/logo_dark.jpg" : "/logo_light.jpg";
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-neutral-100 dark:bg-neutral-950">
       {/* Brand panel */}
@@ -18,8 +20,8 @@ export default function AuthShell({ children }: { children: ReactNode }) {
         </div>
         <div className="relative z-10 text-white max-w-md">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-16 h-16 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center p-1.5 ring-1 ring-white/20">
-              <img src="/logo.png" alt="Selam Security" className="w-full h-full object-contain" />
+            <div className="w-16 h-16 rounded-xl bg-white dark:bg-neutral-900 flex items-center justify-center p-1.5 ring-1 ring-white/20 shadow-sm overflow-hidden">
+              <img src={logoSrc} alt="Selam Security" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
             </div>
             <div>
               <p className="text-2xl font-bold">{t("app.name")}</p>
@@ -27,15 +29,14 @@ export default function AuthShell({ children }: { children: ReactNode }) {
             </div>
           </div>
           <h1 className="text-3xl lg:text-4xl font-bold leading-tight mb-4">
-            Secure your campus, one device at a time.
+            {t("auth.headline")}
           </h1>
           <p className="text-white/80 leading-relaxed">
-            Register devices, generate QR codes, and verify ownership in seconds.
-            Bilingual, voice-enabled, and built for security teams.
+            {t("auth.description")}
           </p>
-          <div className="mt-10 flex items-center gap-6 text-white/60 text-sm">
-            <div className="flex items-center gap-2"><Shield className="w-4 h-4" /> Immutable audit</div>
-            <div className="flex items-center gap-2"><Shield className="w-4 h-4" /> QR verification</div>
+          <div className="mt-10 flex flex-wrap items-center gap-6 text-white/70 text-sm font-medium">
+            <div className="flex items-center gap-2"><Shield className="w-4 h-4 text-white" /> {t("auth.audit")}</div>
+            <div className="flex items-center gap-2"><Shield className="w-4 h-4 text-white" /> {t("auth.qrVerify")}</div>
           </div>
         </div>
       </div>

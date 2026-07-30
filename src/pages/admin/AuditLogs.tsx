@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ScrollText, Filter, ChevronLeft, ChevronRight, Search, User, Smartphone } from "lucide-react";
 import Layout from "../../components/ui/Layout";
 import BackButton from "../../components/ui/BackButton";
-import { Select } from "../../components/ui/Input";
+import OptionPicker from "../../components/ui/OptionPicker";
 import { Spinner, EmptyState } from "../../components/ui/Toast";
 import Button from "../../components/ui/Button";
 import { api } from "../../lib/api";
@@ -83,20 +83,37 @@ export default function AuditLogs() {
       <div className="card p-4 mb-6">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1">
-            <Select name="event" value={eventFilter} onChange={(e) => setEventFilter(e.target.value)}>
-              <option value="">{t("audit.filterEvent")}</option>
-              {eventTypes.map((e) => (
-                <option key={e} value={e}>{t(`events.${e}`)}</option>
-              ))}
-            </Select>
+            <OptionPicker
+              title={t("audit.filterEvent")}
+              placeholder={t("audit.filterEvent")}
+              value={eventFilter}
+              onChange={(val) => setEventFilter(val)}
+              icon={<Filter className="w-4 h-4" />}
+              searchable={true}
+              options={[
+                { value: "", label: `${t("common.all")} (${t("audit.filterEvent")})` },
+                ...eventTypes.map((e) => ({
+                  value: e,
+                  label: t(`events.${e}`),
+                })),
+              ]}
+            />
           </div>
-          <div className="sm:w-48">
-            <Select name="result" value={resultFilter} onChange={(e) => setResultFilter(e.target.value)}>
-              <option value="">{t("audit.filterResult")}</option>
-              {results.map((r) => (
-                <option key={r} value={r}>{t(`results.${r}`)}</option>
-              ))}
-            </Select>
+          <div className="sm:w-60">
+            <OptionPicker
+              title={t("audit.filterResult")}
+              placeholder={t("audit.filterResult")}
+              value={resultFilter}
+              onChange={(val) => setResultFilter(val)}
+              icon={<Filter className="w-4 h-4" />}
+              options={[
+                { value: "", label: `${t("common.all")} (${t("audit.filterResult")})` },
+                ...results.map((r) => ({
+                  value: r,
+                  label: t(`results.${r}`),
+                })),
+              ]}
+            />
           </div>
         </div>
         <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">{total} {t("audit.title").toLowerCase()}</p>

@@ -1,12 +1,14 @@
 import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, Smartphone, Filter, ChevronLeft, ChevronRight, Trash2, AlertTriangle } from "lucide-react";
+import { Search, Smartphone, Filter, ChevronLeft, ChevronRight, Trash2, AlertTriangle, ShieldCheck, Wrench } from "lucide-react";
 import Layout from "../../components/ui/Layout";
 import BackButton from "../../components/ui/BackButton";
 import DeviceCard from "../../components/ui/DeviceCard";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
-import { Input, Select } from "../../components/ui/Input";
+import { Input } from "../../components/ui/Input";
+import { RadioGroup } from "../../components/ui/RadioGroup";
+import OptionPicker from "../../components/ui/OptionPicker";
 import { Spinner, EmptyState } from "../../components/ui/Toast";
 import { api } from "../../lib/api";
 import { toast } from "../../components/ui/Toast";
@@ -101,17 +103,20 @@ export default function DeviceList() {
               placeholder={t("devices.search")}
             />
           </div>
-          <div className="sm:w-48">
-            <Select
-              name="status"
+          <div className="sm:w-56">
+            <OptionPicker
+              title={t("verify.status")}
+              placeholder={t("common.all")}
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="">{t("common.all")}</option>
-              <option value="active">{t("status.active")}</option>
-              <option value="reported_stolen">{t("status.reported_stolen")}</option>
-              <option value="under_maintenance">{t("status.under_maintenance")}</option>
-            </Select>
+              onChange={(val) => setStatusFilter(val)}
+              icon={<Filter className="w-4 h-4" />}
+              options={[
+                { value: "", label: t("common.all"), icon: <Filter className="w-4 h-4 text-neutral-400" /> },
+                { value: "active", label: t("status.active"), icon: <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> },
+                { value: "reported_stolen", label: t("status.reported_stolen"), icon: <AlertTriangle className="w-4 h-4 text-error-600 dark:text-error-400" /> },
+                { value: "under_maintenance", label: t("status.under_maintenance"), icon: <Wrench className="w-4 h-4 text-amber-600 dark:text-amber-400" /> },
+              ]}
+            />
           </div>
         </div>
         <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">{t("devices.total", { count: total })}</p>
@@ -195,16 +200,16 @@ export default function DeviceList() {
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">{t("verify.registeredBy")}: {statusModal.registered_by_name}{statusModal.registered_by_username ? ` (${statusModal.registered_by_username})` : ""}</p>
               )}
             </div>
-            <Select
-              name="newStatus"
+            <RadioGroup
               label={t("verify.status")}
+              options={[
+                { value: "active", label: t("status.active"), icon: <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> },
+                { value: "reported_stolen", label: t("status.reported_stolen"), icon: <AlertTriangle className="w-4 h-4 text-error-600 dark:text-error-400" /> },
+                { value: "under_maintenance", label: t("status.under_maintenance"), icon: <Wrench className="w-4 h-4 text-amber-600 dark:text-amber-400" /> },
+              ]}
               value={newStatus}
-              onChange={(e) => setNewStatus(e.target.value as DeviceStatus)}
-            >
-              <option value="active">{t("status.active")}</option>
-              <option value="reported_stolen">{t("status.reported_stolen")}</option>
-              <option value="under_maintenance">{t("status.under_maintenance")}</option>
-            </Select>
+              onChange={(value) => setNewStatus(value as DeviceStatus)}
+            />
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="outline" onClick={() => setStatusModal(null)}>
                 {t("common.cancel")}

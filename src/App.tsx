@@ -28,11 +28,16 @@ function AppRoutes() {
   }, [initialized, fetchMe]);
 
   useEffect(() => {
-    if (user?.language) {
-      i18n.changeLanguage(user.language);
-      document.documentElement.lang = user.language;
+    const savedLang = localStorage.getItem("app_language");
+    const targetLang = savedLang === "am" || savedLang === "en" ? savedLang : user?.language || "en";
+    if (targetLang && i18n.language !== targetLang) {
+      i18n.changeLanguage(targetLang);
+      document.documentElement.lang = targetLang;
     }
-  }, [user?.language, i18n]);
+    if (user && savedLang && (savedLang === "am" || savedLang === "en") && user.language !== savedLang) {
+      useAuthStore.getState().setLanguage(savedLang as "en" | "am");
+    }
+  }, [user, i18n]);
 
   return (
     <Routes>

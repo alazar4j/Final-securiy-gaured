@@ -9,6 +9,12 @@ const en = {
     name: "Selam Security",
     tagline: "Security & Device Registration",
   },
+  auth: {
+    headline: "Secure your campus, one device at a time.",
+    description: "Register devices, generate QR codes, and verify ownership in seconds. Bilingual, voice-enabled, and built for security teams.",
+    audit: "Immutable audit",
+    qrVerify: "QR verification",
+  },
   common: {
     save: "Save",
     cancel: "Cancel",
@@ -17,6 +23,7 @@ const en = {
     delete: "Delete",
     edit: "Edit",
     search: "Search",
+    searchOptions: "Search options...",
     loading: "Loading...",
     noData: "No data found",
     error: "Something went wrong",
@@ -49,8 +56,12 @@ const en = {
   },
   forgot: {
     title: "Forgot Password",
-    subtitle: "Enter your username to receive a recovery code by email",
+    subtitle: "Enter your username or email to receive a recovery code",
     username: "Username",
+    identityLabel: "Username or Registered Email",
+    identityPlaceholder: "e.g. security1 or user@selamsecurity.edu.et",
+    dispatchedTitle: "Recovery email dispatched!",
+    dispatchedDesc: "A 6-digit recovery code has been sent to {{email}}. Please check your inbox and enter the code below.",
     requestOtp: "Send Recovery Code",
     otpSent: "If the user exists, a recovery code has been sent to their registered email address.",
     otp: "Recovery code",
@@ -62,6 +73,16 @@ const en = {
     success: "Password reset successfully. You can now sign in.",
     backToLogin: "Back to login",
     emailSent: "A recovery code has been sent to your email address.",
+  },
+  placeholders: {
+    fullName: "Full Name",
+    phone: "e.g. +251 91 123 4567",
+    brand: "e.g. Dell, HP, Apple",
+    model: "e.g. Latitude 5420",
+    color: "e.g. Silver, Black",
+    serial: "S/N or Asset Tag",
+    username: "e.g. jdoe",
+    email: "john@selamsecurity.com",
   },
   changePassword: {
     title: "Change Password",
@@ -82,6 +103,7 @@ const en = {
     scansToday: "Scans (24h)",
     quickActions: "Quick Actions",
     registerNew: "Register New Device",
+    registerDesc: "Capture owner & device info with voice and image.",
     verifyDevice: "Verify a Device",
     recentActivity: "Recent Activity",
   },
@@ -94,6 +116,7 @@ const en = {
     ownerRole: "Owner Role",
     student: "Student",
     staff: "Staff",
+    guest: "Guest",
     phone: "Phone Number",
     brand: "Brand",
     model: "Model",
@@ -217,6 +240,9 @@ const en = {
     email: "Email",
     emailRequired: "Email is required",
     emailInvalid: "Please enter a valid email address",
+    primaryAdmin: "Primary Admin",
+    immutable: "Immutable",
+    requiredFields: "Username and full name are required",
     defaultPasswordNote: "New security users are created with the default password 1234.",
     created: "User created. Default password: 1234",
     adminCreateNote: "Only administrators can create new admin accounts.",
@@ -268,7 +294,13 @@ const en = {
 const am = {
   app: {
     name: "ሰላም ሴኩሪቲ",
-    tagline: "የ ደህንነት እና የመሳሪያ ምዝገባ",
+    tagline: "የደህንነት እና የመሳሪያ ምዝገባ",
+  },
+  auth: {
+    headline: "ካምፓስዎን ይጠብቁ፣ በየመሳሪያው።",
+    description: "መሳሪያዎችን ይመዝግቡ፣ የQR ኮዶችን ያፍልቁ፣ እና ባለቤትነትን በሰከንዶች ውስጥ ያረጋግጡ። በሁለት ቋንቋ፣ በድምፅ የተደገፈ እና ለደህንነት ቡድኖች የተገነባ።",
+    audit: "የማይለወጥ ኦዲት",
+    qrVerify: "የQR ማረጋገጫ",
   },
   common: {
     save: "አስቀምጥ",
@@ -278,6 +310,7 @@ const am = {
     delete: "ሰርዝ",
     edit: "አስተካክል",
     search: "ፈልግ",
+    searchOptions: "አማራጮችን ፈልግ...",
     loading: "በመጫን ላይ...",
     noData: "መረጃ አልተገኘም",
     error: "የሆነ ችግር ተፈጥሯል",
@@ -309,12 +342,16 @@ const am = {
     invalidCredentials: "የተጠቃሚ ስም ወይም ይለፍ ቃል የተሳሳተ ነው",
   },
   forgot: {
-    title: "ይለፍ ቃል ረሳኽ",
-    subtitle: "አንድ ጊዜያዊ ኮድ ለማግኘት የተጠቃሚ ስምህን አስገባ",
+    title: "ይለፍ ቃል ረሳህ?",
+    subtitle: "የመመለሻ ኮድ ለማግኘት የተጠቃሚ ስምህን ወይም ኢሜይልህን አስገባ",
     username: "የተጠቃሚ ስም",
-    requestOtp: "ኮድ ጠይቅ",
+    identityLabel: "የተጠቃሚ ስም ወይም የተመዘገበ ኢሜይል",
+    identityPlaceholder: "ምሳሌ፡ security1 ወይም user@selamsecurity.edu.et",
+    dispatchedTitle: "የይለፍ ቃል መመለሻ ኢሜይል ተልኳል!",
+    dispatchedDesc: "ባለ 6 አሃዝ መመለሻ ኮድ ወደ {{email}} ተልኳል። እባክዎ ኢሜይልዎን ይፈትሹ እና ኮዱን ከታች ያስገቡ።",
+    requestOtp: "ኮድ ላክ",
     otpSent: "ተጠቃሚው ካለ ኮድ ተፈጥሯል።",
-    otp: "አንድ ጊዜያዊ ኮድ",
+    otp: "የመመለሻ ኮድ",
     newPassword: "አዲስ ይለፍ ቃል",
     confirmNewPassword: "አዲስ ይለፍ ቃል አረጋግጥ",
     reset: "ይለፍ ቃል ዳግም አስጀምር",
@@ -323,6 +360,17 @@ const am = {
     success: "ይለፍ ቃል በተሳካ ሁኔታ ተቀይሯል። አሁን መግባት ትችላለህ።",
     backToLogin: "ወደ መግቢያ ተመለስ",
     devOtpNotice: "የአንድ ጊዜያዊ ኮድህ (የኢሜይል ልልት በመጠበቅ ላይ):",
+    emailSent: "የመመለሻ ኮድ ወደ ኢሜይል አድራሻህ ተልኳል።",
+  },
+  placeholders: {
+    fullName: "ሙሉ ስም",
+    phone: "ምሳሌ፡ +251 91 123 4567",
+    brand: "ምሳሌ፡ ዴል፣ ኤችፒ፣ አፕል",
+    model: "ምሳሌ፡ ላቲቲዩድ 5420",
+    color: "ምሳሌ፡ ብርማ፣ ጥቁር",
+    serial: "ሲሪያል ቁጥር ወይም አሴት ታግ",
+    username: "ምሳሌ፡ jdoe",
+    email: "john@selamsecurity.com",
   },
   changePassword: {
     title: "ይለፍ ቃል ቀይር",
@@ -343,6 +391,7 @@ const am = {
     scansToday: "ስካኖች (24 ሰዓታት)",
     quickActions: "ፈጣን እርምጃዎች",
     registerNew: "አዲስ መሳሪያ መዝግብ",
+    registerDesc: "የባለቤት እና የመሳሪያ መረጃን በድምፅ እና በምስል ይያዙ።",
     verifyDevice: "መሳሪያ አረጋግጥ",
     recentActivity: "የቅርብ ጊዜ ንቅናቄ",
   },
@@ -355,6 +404,7 @@ const am = {
     ownerRole: "የባለቤት ሁኔታ",
     student: "ተማሪ",
     staff: "ሰራተኛ",
+    guest: "እንግዳ",
     phone: "ስልክ ቁጥር",
     brand: "ማርክ",
     model: "ሞዴል",
@@ -478,6 +528,9 @@ const am = {
     email: "ኢሜይል",
     emailRequired: "ኢሜይል ያስፈልጋል",
     emailInvalid: "ትክክለኛ የኢሜይል አድራሻ ያስገቡ",
+    primaryAdmin: "ዋና አስተዳዳሪ",
+    immutable: "የማይለወጥ",
+    requiredFields: "የተጠቃሚ ስም እና ሙሉ ስም ያስፈልጋሉ",
     defaultPasswordNote: "አዲስ የ ደህንነት ተጠቃሚዎች በመነሻ ይለፍ ቃል 1234 ይፈጠራሉ።",
     created: "ተጠቃሚ ተፈጥሯል። መነሻ ይለፍ ቃል: 1234",
     adminCreateNote: "አስተዳዳሪዎች ብቻ አዲስ የአስተዳዳሪ መለያ መፍጠር ይችላሉ።",
@@ -526,14 +579,24 @@ const am = {
   },
 };
 
+const savedLang = typeof window !== "undefined" ? localStorage.getItem("app_language") : null;
+const initialLanguage = savedLang === "am" || savedLang === "en" ? savedLang : "en";
+
 i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
     am: { translation: am },
   },
-  lng: "en",
+  lng: initialLanguage,
   fallbackLng: "en",
   interpolation: { escapeValue: false },
+});
+
+i18n.on("languageChanged", (lng) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("app_language", lng);
+    document.documentElement.lang = lng;
+  }
 });
 
 export default i18n;

@@ -95,7 +95,7 @@ export default function Dashboard() {
             <ArrowRight className="w-5 h-5 text-neutral-300 group-hover:text-primary-500 group-hover:translate-x-1 transition-all" />
           </div>
           <p className="font-semibold text-neutral-900 dark:text-neutral-100">{t("dashboard.registerNew")}</p>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">Capture owner & device info with voice and image.</p>
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{t("dashboard.registerDesc")}</p>
         </Link>
         <Link to="/verify" className="card p-6 group hover:shadow-card-hover hover:border-primary-200 transition-all">
           <div className="flex items-center justify-between mb-4">

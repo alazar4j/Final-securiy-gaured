@@ -11,6 +11,7 @@ export default function LanguageToggle({ compact = false }: { compact?: boolean 
   const current = (i18n.language as Language) || "en";
 
   const switchTo = (lang: Language) => {
+    localStorage.setItem("app_language", lang);
     i18n.changeLanguage(lang);
     document.documentElement.lang = lang;
     if (user) setLanguage(lang);

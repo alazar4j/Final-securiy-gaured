@@ -16,7 +16,7 @@ export interface AppUser {
 }
 
 export type DeviceStatus = "active" | "reported_stolen" | "under_maintenance";
-export type OwnerRole = "student" | "staff";
+export type OwnerRole = "student" | "staff" | "guest";
 
 export interface Device {
   id: string;

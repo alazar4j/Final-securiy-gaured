@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { QrCode, Hash, Search, AlertTriangle, Phone, User, Smartphone, Palette, Calendar, ShieldCheck, Edit2 } from "lucide-react";
+import { QrCode, Hash, Search, AlertTriangle, Phone, User, Smartphone, Palette, Calendar, ShieldCheck, Edit2, Wrench } from "lucide-react";
 import Layout from "../components/ui/Layout";
 import BackButton from "../components/ui/BackButton";
 import QRScanner from "../components/ui/QRScanner";
@@ -10,6 +10,7 @@ import StatusBadge from "../components/ui/StatusBadge";
 import Button from "../components/ui/Button";
 import Modal from "../components/ui/Modal";
 import { Input, Select } from "../components/ui/Input";
+import { RadioGroup } from "../components/ui/RadioGroup";
 import { EmptyState, toast } from "../components/ui/Toast";
 import { api } from "../lib/api";
 import { getDeviceImageUrl } from "../lib/imageUpload";
@@ -125,7 +126,7 @@ export default function VerifyDevice() {
                 value={serial}
                 onChange={(e) => setSerial(e.target.value)}
                 icon={<Hash className="w-4 h-4" />}
-                placeholder="SN-123456"
+                placeholder={t("placeholders.serial")}
                 autoFocus
               />
               <Button type="submit" loading={loading} fullWidth>
@@ -145,7 +146,7 @@ export default function VerifyDevice() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 icon={<User className="w-4 h-4" />}
-                placeholder="John Doe"
+                placeholder={t("placeholders.fullName")}
                 autoFocus
               />
               <Button type="submit" loading={loading} fullWidth>
@@ -226,7 +227,7 @@ export default function VerifyDevice() {
                             <div>
                               <p className="text-xs text-neutral-500 dark:text-neutral-400">{t("verify.owner")}</p>
                               <p className="font-medium text-neutral-900 dark:text-neutral-100">{selected.owner_name}</p>
-                              <p className="text-xs text-neutral-500 dark:text-neutral-400">{t(`register.${selected.owner_role === "student" ? "student" : "staff"}`)}</p>
+                              <p className="text-xs text-neutral-500 dark:text-neutral-400">{t(`register.${selected.owner_role || "student"}`)}</p>
                             </div>
                             <div>
                               <p className="text-xs text-neutral-500 dark:text-neutral-400">{t("verify.phone")}</p>
@@ -284,16 +285,16 @@ export default function VerifyDevice() {
               <p className="font-semibold text-neutral-900 dark:text-neutral-100">{selected.brand} {selected.model}</p>
               <p className="text-xs text-neutral-500 font-mono">{selected.serial_number}</p>
             </div>
-            <Select
-              name="newStatus"
+            <RadioGroup
               label={t("verify.status")}
+              options={[
+                { value: "active", label: t("status.active"), icon: <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> },
+                { value: "reported_stolen", label: t("status.reported_stolen"), icon: <AlertTriangle className="w-4 h-4 text-error-600 dark:text-error-400" /> },
+                { value: "under_maintenance", label: t("status.under_maintenance"), icon: <Wrench className="w-4 h-4 text-amber-600 dark:text-amber-400" /> },
+              ]}
               value={newStatus}
-              onChange={(e) => setNewStatus(e.target.value as DeviceStatus)}
-            >
-              <option value="active">{t("status.active")}</option>
-              <option value="reported_stolen">{t("status.reported_stolen")}</option>
-              <option value="under_maintenance">{t("status.under_maintenance")}</option>
-            </Select>
+              onChange={(value) => setNewStatus(value as DeviceStatus)}
+            />
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="outline" onClick={() => setStatusModalOpen(false)}>
                 {t("common.cancel")}

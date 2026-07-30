@@ -69,11 +69,11 @@ export default function ForgotPassword() {
           <ErrorBanner message={error} />
           <Input
             name="identity"
-            label="Username or Registered Email"
+            label={t("forgot.identityLabel")}
             value={identity}
             onChange={(e) => setIdentity(e.target.value)}
             icon={<User className="w-4 h-4" />}
-            placeholder="e.g. security1 or user@selamsecurity.edu.et"
+            placeholder={t("forgot.identityPlaceholder")}
             autoFocus
             required
           />
@@ -86,10 +86,10 @@ export default function ForgotPassword() {
           <div className="px-4 py-3 rounded-xl bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-300 text-sm space-y-1">
             <div className="flex items-center gap-2 font-semibold">
               <MailCheck className="w-4 h-4 text-primary-600 flex-shrink-0" />
-              <p>Recovery email dispatched!</p>
+              <p>{t("forgot.dispatchedTitle")}</p>
             </div>
             <p className="text-xs opacity-90">
-              A 6-digit recovery code has been sent to <span className="font-medium">{dispatchedEmail}</span>. Please check your inbox and enter the code below.
+              {t("forgot.dispatchedDesc", { email: dispatchedEmail })}
             </p>
           </div>
           <ErrorBanner message={error} />

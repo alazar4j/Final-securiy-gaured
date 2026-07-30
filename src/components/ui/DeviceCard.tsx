@@ -36,7 +36,7 @@ export default function DeviceCard({ device, onClick }: { device: Device; onClic
           )}
           <div>
             <p className="font-semibold text-neutral-900 dark:text-neutral-100">{device.brand} {device.model}</p>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">{t(`register.${device.owner_role === "student" ? "student" : "staff"}`)}</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">{t(`register.${device.owner_role || "student"}`)}</p>
           </div>
         </div>
         <StatusBadge status={device.status} size="sm" />

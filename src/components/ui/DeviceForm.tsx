@@ -1,11 +1,12 @@
 import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { User, Phone, Smartphone, Hash, Palette, Tag, Save } from "lucide-react";
+import { User, Phone, Smartphone, Hash, Palette, Tag, Save, UserCheck } from "lucide-react";
 import type { Device, DeviceStatus, OwnerRole } from "../../types";
 import Button from "./Button";
 import { Input, Select } from "./Input";
 import VoiceInput from "./VoiceInput";
 import ImageUpload from "./ImageUpload";
+import OptionPicker from "./OptionPicker";
 import { compressAndUploadImage } from "../../lib/imageUpload";
 import { toast } from "./Toast";
 
@@ -78,7 +79,7 @@ export default function DeviceForm({ onSubmit, submitLabel, initial, presetSeria
               value={form.owner_name}
               onChange={(e) => set("owner_name", e.target.value)}
               icon={<User className="w-4 h-4" />}
-              placeholder="Full Name"
+              placeholder={t("placeholders.fullName")}
               required
             />
             <div className="pt-1">
@@ -86,15 +87,17 @@ export default function DeviceForm({ onSubmit, submitLabel, initial, presetSeria
             </div>
           </div>
           <div>
-            <Select
-              name="owner_role"
+            <OptionPicker
               label={t("register.ownerRole")}
               value={form.owner_role}
-              onChange={(e) => set("owner_role", e.target.value)}
-            >
-              <option value="student">{t("register.student")}</option>
-              <option value="staff">{t("register.staff")}</option>
-            </Select>
+              icon={<UserCheck className="w-4 h-4" />}
+              options={[
+                { value: "student", label: t("register.student") },
+                { value: "staff", label: t("register.staff") },
+                { value: "guest", label: t("register.guest") },
+              ]}
+              onChange={(value) => set("owner_role", value as OwnerRole)}
+            />
           </div>
           <div className="sm:col-span-2 space-y-1">
             <Input
@@ -127,7 +130,7 @@ export default function DeviceForm({ onSubmit, submitLabel, initial, presetSeria
               value={form.brand}
               onChange={(e) => set("brand", e.target.value)}
               icon={<Tag className="w-4 h-4" />}
-              placeholder="e.g. Dell, HP, Apple"
+              placeholder={t("placeholders.brand")}
               required
             />
             <div className="pt-1">
@@ -140,7 +143,7 @@ export default function DeviceForm({ onSubmit, submitLabel, initial, presetSeria
               label={t("register.model")}
               value={form.model}
               onChange={(e) => set("model", e.target.value)}
-              placeholder="e.g. Latitude 5420"
+              placeholder={t("placeholders.model")}
               required
             />
             <div className="pt-1">
@@ -154,7 +157,7 @@ export default function DeviceForm({ onSubmit, submitLabel, initial, presetSeria
               value={form.color}
               onChange={(e) => set("color", e.target.value)}
               icon={<Palette className="w-4 h-4" />}
-              placeholder="e.g. Silver, Black"
+              placeholder={t("placeholders.color")}
             />
             <div className="pt-1">
               <VoiceInput field="color" label={t("register.voiceInput")} value={form.color} onChange={(v) => set("color", v)} />
@@ -167,7 +170,7 @@ export default function DeviceForm({ onSubmit, submitLabel, initial, presetSeria
               value={form.serial_number}
               onChange={(e) => set("serial_number", e.target.value)}
               icon={<Hash className="w-4 h-4" />}
-              placeholder="S/N or Asset Tag"
+              placeholder={t("placeholders.serial")}
               hint={t("common.optional")}
             />
             <div className="pt-1">

@@ -8,7 +8,8 @@ import Layout from "../../components/ui/Layout";
 import BackButton from "../../components/ui/BackButton";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
-import { Input, Select } from "../../components/ui/Input";
+import { Input } from "../../components/ui/Input";
+import { RadioGroup } from "../../components/ui/RadioGroup";
 import { Spinner, EmptyState } from "../../components/ui/Toast";
 import { api } from "../../lib/api";
 import { toast } from "../../components/ui/Toast";
@@ -67,7 +68,7 @@ export default function UserManagement() {
 
   const createUser = async () => {
     if (!newUsername.trim() || !newFullName.trim()) {
-      toast.error("Username and full name are required");
+      toast.error(t("users.requiredFields"));
       return;
     }
     if (!validateEmail(newEmail)) return;
@@ -185,7 +186,7 @@ export default function UserManagement() {
                         <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 truncate">{u.full_name}</h3>
                         {isMainAdmin ? (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700">
-                            <Crown className="w-3 h-3 text-amber-600" /> Primary Admin
+                            <Crown className="w-3 h-3 text-amber-600" /> {t("users.primaryAdmin")}
                           </span>
                         ) : isUserAdmin ? (
                           <Crown className="w-3.5 h-3.5 text-primary-500 flex-shrink-0" />
@@ -226,7 +227,7 @@ export default function UserManagement() {
                     <div className="flex items-center gap-1">
                       {isMainAdmin ? (
                         <span className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400 flex items-center gap-1 px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-800">
-                          <Shield className="w-3 h-3 text-amber-500" /> Immutable
+                          <Shield className="w-3 h-3 text-amber-500" /> {t("users.immutable")}
                         </span>
                       ) : u.must_change_password ? (
                         <span className="text-[10px] text-warning-600 dark:text-warning-400 font-medium mr-1">
@@ -271,7 +272,7 @@ export default function UserManagement() {
               label={t("users.username")}
               value={newUsername}
               onChange={(e) => setNewUsername(e.target.value)}
-              placeholder="e.g. jdoe"
+              placeholder={t("placeholders.username")}
               autoFocus
             />
             <Input
@@ -279,7 +280,7 @@ export default function UserManagement() {
               label={t("users.fullName")}
               value={newFullName}
               onChange={(e) => setNewFullName(e.target.value)}
-              placeholder="John Doe"
+              placeholder={t("placeholders.fullName")}
             />
             <div>
               <Input
@@ -292,7 +293,7 @@ export default function UserManagement() {
                 }}
                 onBlur={() => validateEmail(newEmail)}
                 icon={<Mail className="w-4 h-4" />}
-                placeholder="john@selamsecurity.com"
+                placeholder={t("placeholders.email")}
                 error={emailError || undefined}
               />
             </div>
@@ -302,18 +303,18 @@ export default function UserManagement() {
               value={newPhone}
               onChange={(e) => setNewPhone(e.target.value)}
               icon={<Phone className="w-4 h-4" />}
-              placeholder="+251..."
+              placeholder={t("placeholders.phone")}
             />
             {isAdmin && (
-              <Select
-                name="newRole"
+              <RadioGroup
                 label={t("users.role")}
+                options={[
+                  { value: "security", label: t("roles.security"), icon: <Shield className="w-4 h-4 text-primary-600 dark:text-primary-400" /> },
+                  { value: "admin", label: t("roles.admin"), icon: <Crown className="w-4 h-4 text-amber-500" /> },
+                ]}
                 value={newRole}
-                onChange={(e) => setNewRole(e.target.value as "security" | "admin")}
-              >
-                <option value="security">{t("roles.security")}</option>
-                <option value="admin">{t("roles.admin")}</option>
-              </Select>
+                onChange={(val) => setNewRole(val as "security" | "admin")}
+              />
             )}
             <p className="text-xs text-neutral-500 dark:text-neutral-400">{t("users.defaultPasswordNote")}</p>
             <div className="flex justify-end gap-2 pt-2">

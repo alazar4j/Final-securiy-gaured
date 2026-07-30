@@ -45,6 +45,8 @@ export default function Layout({ children }: { children: ReactNode }) {
     setLogoutOpen(true);
   };
 
+  const logoSrc = mode === "dark" ? "/logo_dark.jpg" : "/logo_light.jpg";
+
   const confirmLogout = async () => {
     setLogoutOpen(false);
     await handleLogout();
@@ -55,7 +57,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   const SidebarContent = (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-3 px-5 py-5 border-b border-neutral-200 dark:border-neutral-800">
-        <img src="/logo.png" alt="Selam Security" className="w-16 h-16 object-contain" />
+        <div className="w-14 h-14 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-1 flex items-center justify-center overflow-hidden flex-shrink-0">
+          <img src={logoSrc} alt="Selam Security" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+        </div>
         <div>
           <p className="text-sm font-bold text-neutral-900 dark:text-neutral-100 leading-tight">{t("app.name")}</p>
           <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-tight">{t("app.tagline")}</p>
@@ -161,7 +165,9 @@ export default function Layout({ children }: { children: ReactNode }) {
               <Menu className="w-6 h-6" />
             </button>
             <div className="lg:hidden flex items-center gap-2">
-            <img src="/logo.png" alt="Selam Security" className="w-12 h-12 object-contain" />
+              <div className="w-10 h-10 rounded-lg bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-0.5 flex items-center justify-center overflow-hidden flex-shrink-0">
+                <img src={logoSrc} alt="Selam Security" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+              </div>
               <span className="font-bold text-base text-neutral-900 dark:text-neutral-100">{t("app.name")}</span>
             </div>
             <div className="hidden lg:block" />
