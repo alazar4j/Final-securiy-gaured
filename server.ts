@@ -727,6 +727,36 @@ apiRouter.get("/admin/audit", requireAdmin, (req, res) => {
   return res.json({ logs: paginated, total, page, page_size: pageSize });
 });
 
+apiRouter.get("/admin/audit/charts", requireAdmin, (req, res) => {
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const recentLogs = auditLogs.filter(log => new Date(log.created_at) >= thirtyDaysAgo);
+
+  const dailyData: Record<string, { date: string, registrations: number, verifications: number }> = {};
+
+  // Initialize the last 30 days
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+    const dateStr = d.toISOString().split("T")[0];
+    dailyData[dateStr] = { date: dateStr, registrations: 0, verifications: 0 };
+  }
+
+  // Populate data
+  recentLogs.forEach(log => {
+    const dateStr = log.created_at.split("T")[0];
+    if (dailyData[dateStr]) {
+      if (log.event_type === "register") {
+        dailyData[dateStr].registrations++;
+      } else if (["scan_qr", "lookup_serial", "lookup_name"].includes(log.event_type)) {
+        dailyData[dateStr].verifications++;
+      }
+    }
+  });
+
+  const chartData = Object.values(dailyData);
+
+  return res.json({ chartData });
+});
+
 apiRouter.get("/admin/stats", requireAdmin, (req, res) => {
   const totalDevs = devices.length;
   const stolen = devices.filter((d) => d.status === "reported_stolen").length;

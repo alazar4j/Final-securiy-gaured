@@ -151,7 +151,7 @@ const en = {
     qrDownloaded: "QR Code downloaded",
     qrNotReady: "QR Code not ready, please wait",
     downloadFailed: "Download failed",
-    downloadQr: "Download QR",
+    downloadQr: "Download as PNG",
     registerAnother: "Register Another",
   },
   verify: {
@@ -207,6 +207,10 @@ const en = {
   audit: {
     title: "Audit Logs",
     subtitle: "Immutable record of all scan and lookup events",
+    exportCsv: "Export CSV",
+    activity30Days: "Activity Last 30 Days",
+    verifications: "Verifications (Scans)",
+    registrations: "Registrations",
     filterEvent: "Filter by event",
     filterResult: "Filter by result",
     eventType: "Event",
@@ -495,6 +499,10 @@ const am = {
   audit: {
     title: "የንቅናቄ ምዝገባ",
     subtitle: "ሁሉምም የስካን እና የፍለጋ ክስተቶች የማይቀየር መዝገብ",
+    exportCsv: "CSV አውርድ",
+    activity30Days: "የ30 ቀናት እንቅስቃሴ",
+    verifications: "ማረጋገጫዎች (ስካን)",
+    registrations: "ምዝገባዎች",
     filterEvent: "በክስተት አጥራ",
     filterResult: "በውጤት አጥራ",
     eventType: "ክስተት",

@@ -113,5 +113,6 @@ export const api = {
       `/admin/audit${qs ? `?${qs}` : ""}`
     );
   },
+  getAuditCharts: () => apiCall<{ chartData: { date: string, registrations: number, verifications: number }[] }>("/admin/audit/charts"),
   stats: () => apiCall<Stats>("/admin/stats"),
 };
