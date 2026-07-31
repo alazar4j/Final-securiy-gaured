@@ -466,7 +466,7 @@ apiRouter.post("/devices", requireAuth, (req, res) => {
   const d = req.body?.device;
   if (!d) return res.status(400).json({ error: "Device data required" });
 
-  const required = ["owner_name", "owner_role", "owner_phone", "brand", "model"];
+  const required = ["owner_name", "owner_role", "owner_phone", "brand"];
   for (const f of required) {
     if (!d[f] || String(d[f]).trim() === "") return res.status(400).json({ error: `Missing field: ${f}` });
   }
@@ -484,7 +484,7 @@ apiRouter.post("/devices", requireAuth, (req, res) => {
     owner_role: d.owner_role,
     owner_phone: d.owner_phone.trim(),
     brand: d.brand.trim(),
-    model: d.model.trim(),
+    model: (d.model || "").trim(),
     color: d.color?.trim(),
     serial_number: serial || undefined,
     qr_token,

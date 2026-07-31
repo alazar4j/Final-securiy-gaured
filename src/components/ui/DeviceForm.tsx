@@ -144,7 +144,7 @@ export default function DeviceForm({ onSubmit, submitLabel, initial, presetSeria
               value={form.model}
               onChange={(e) => set("model", e.target.value)}
               placeholder={t("placeholders.model")}
-              required
+              hint={t("common.optional")}
             />
             <div className="pt-1">
               <VoiceInput field="model" label={t("register.voiceInput")} value={form.model} onChange={(v) => set("model", v)} />

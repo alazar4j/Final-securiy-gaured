@@ -25,21 +25,23 @@ export default function DeviceCard({ device, onClick }: { device: Device; onClic
       onClick={onClick}
       className={`card p-5 transition-all ${onClick ? "cursor-pointer hover:shadow-card-hover hover:border-primary-200" : ""}`}
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
+      <div className="flex items-start justify-between mb-4 gap-2">
+        <div className="flex items-center gap-3 min-w-0">
           {imageUrl ? (
-            <img src={imageUrl} alt={device.brand} className="w-14 h-14 rounded-lg object-cover border border-neutral-200 dark:border-neutral-700" />
+            <img src={imageUrl} alt={device.brand} className="w-14 h-14 rounded-lg object-cover border border-neutral-200 dark:border-neutral-700 flex-shrink-0" />
           ) : (
-            <div className="w-14 h-14 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+            <div className="w-14 h-14 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center flex-shrink-0">
               <Smartphone className="w-6 h-6 text-neutral-400" />
             </div>
           )}
-          <div>
-            <p className="font-semibold text-neutral-900 dark:text-neutral-100">{device.brand} {device.model}</p>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">{t(`register.${device.owner_role || "student"}`)}</p>
+          <div className="min-w-0">
+            <p className="font-semibold text-neutral-900 dark:text-neutral-100 truncate">{device.brand} {device.model}</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate">{t(`register.${device.owner_role || "student"}`)}</p>
           </div>
         </div>
-        <StatusBadge status={device.status} size="sm" />
+        <div className="flex-shrink-0">
+          <StatusBadge status={device.status} size="sm" />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">

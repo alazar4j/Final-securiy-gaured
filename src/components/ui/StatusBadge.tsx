@@ -25,7 +25,7 @@ export default function StatusBadge({ status, size = "md" }: { status: DeviceSta
   const { key, classes, icon: Icon } = config[status];
   const sizing = size === "sm" ? "text-[10px] px-2 py-0.5 gap-1" : "text-xs px-2.5 py-1 gap-1.5";
   return (
-    <span className={`inline-flex items-center font-medium rounded-full ring-1 ring-inset ${classes} ${sizing}`}>
+    <span className={`inline-flex items-center whitespace-nowrap font-medium rounded-full ring-1 ring-inset ${classes} ${sizing}`}>
       <Icon className={size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5"} />
       <span>{t(key)}</span>
     </span>
