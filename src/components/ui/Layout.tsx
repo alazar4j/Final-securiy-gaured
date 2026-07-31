@@ -45,7 +45,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     setLogoutOpen(true);
   };
 
-  const logoSrc = mode === "dark" ? "/logo_dark.jpg" : "/logo_light.jpg";
+  const logoSrc = mode === "dark" ? "/logo_dark.svg" : "/logo_light.svg";
 
   const confirmLogout = async () => {
     setLogoutOpen(false);

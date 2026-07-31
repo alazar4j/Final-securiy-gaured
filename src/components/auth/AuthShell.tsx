@@ -7,7 +7,7 @@ import { Moon, Sun, Shield } from "lucide-react";
 export default function AuthShell({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
   const { mode, toggle: toggleTheme } = useThemeStore();
-  const logoSrc = mode === "dark" ? "/logo_dark.jpg" : "/logo_light.jpg";
+  const logoSrc = mode === "dark" ? "/logo_dark.svg" : "/logo_light.svg";
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-neutral-100 dark:bg-neutral-950">
