@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import multer from "multer";
 import fs from "fs";
+import nodemailer from "nodemailer";
 
 const app = express();
 const PORT = 3000;
@@ -80,7 +81,7 @@ const users: AppUser[] = [
     password_hash: "1234", // Simple demo verification
     role: "admin",
     full_name: "System Administrator",
-    email: "admin@selamsecurity.edu.et",
+    email: "alazarginbaru1@gmail.com",
     phone: "+251911000000",
     language: "en",
     is_active: true,
@@ -326,7 +327,7 @@ apiRouter.get("/auth/me", requireAuth, (req, res) => {
   });
 });
 
-apiRouter.post("/auth/forgot-password", (req, res) => {
+apiRouter.post("/auth/forgot-password", async (req, res) => {
   const identifier = (req.body?.username || "").trim().toLowerCase();
   if (!identifier) return res.status(400).json({ error: "Username or email is required" });
   const user = users.find((u) => u.username.toLowerCase() === identifier || u.email.toLowerCase() === identifier);
@@ -345,6 +346,26 @@ apiRouter.post("/auth/forgot-password", (req, res) => {
       result: "success",
       details: { email_sent_to: user.email, otp },
     });
+
+    try {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "alazarginbaru1@gmail.com",
+          pass: "aveqjhyvpnyadndp",
+        },
+      });
+
+      await transporter.sendMail({
+        from: '"Selam Security" <alazarginbaru1@gmail.com>',
+        to: user.email,
+        subject: "Your Password Recovery Code",
+        text: `Your password recovery code is: ${otp}\n\nThis code will expire in 10 minutes.`,
+      });
+      console.log(`OTP email sent to ${user.email}`);
+    } catch (err) {
+      console.error("Failed to send OTP email:", err);
+    }
 
     const parts = user.email.split("@");
     const maskedEmail = parts[0].length > 2
