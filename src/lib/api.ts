@@ -46,7 +46,7 @@ async function apiCall<T>(
   return data as T;
 }
 
-export const api = {
+const backendApi = {
   // Auth
   login: (username: string, password: string) =>
     apiCall<Session>("/auth/login", { method: "POST", body: { username, password } }),
@@ -115,4 +115,175 @@ export const api = {
   },
   getAuditCharts: () => apiCall<{ chartData: { date: string, registrations: number, verifications: number }[] }>("/admin/audit/charts"),
   stats: () => apiCall<Stats>("/admin/stats"),
+  adminAssistant: (prompt: string, history?: any[]) => 
+    apiCall<{ text: string }>("/admin/assistant", { 
+      method: "POST", 
+      body: { prompt, history } 
+    }),
+};
+
+import {
+  enqueueSyncOperation,
+  cacheDevices,
+  getCachedDevices,
+  getCachedDeviceById,
+  searchDevicesByName,
+  saveDeviceToCache,
+  findDeviceByQr,
+  findDevicesBySerial,
+} from "./db";
+
+// Process queue on load if online
+import { processSyncQueue } from "./sync";
+if (typeof window !== "undefined" && navigator.onLine) {
+  setTimeout(processSyncQueue, 1000);
+}
+
+export const api = {
+  ...backendApi,
+  
+  listDevices: async (params: { search?: string; status?: string; page?: number; page_size?: number } = {}) => {
+    if (!navigator.onLine) {
+      let list = await getCachedDevices();
+      if (params.status) {
+        list = list.filter((d) => d.status === params.status);
+      }
+      if (params.search) {
+        const lower = params.search.toLowerCase();
+        list = list.filter(
+          (d) =>
+            d.owner_name.toLowerCase().includes(lower) ||
+            (d.serial_number && d.serial_number.toLowerCase().includes(lower)) ||
+            d.brand.toLowerCase().includes(lower) ||
+            d.model.toLowerCase().includes(lower)
+        );
+      }
+      const page = params.page || 1;
+      const pageSize = params.page_size || 20;
+      const total = list.length;
+      const startIndex = (page - 1) * pageSize;
+      const paginated = list.slice(startIndex, startIndex + pageSize);
+      return { devices: paginated, total, page, page_size: pageSize };
+    }
+    
+    try {
+      const res = await backendApi.listDevices(params);
+      // Cache the result if no filters
+      if (!params.search && !params.status && (!params.page || params.page === 1)) {
+        await cacheDevices(res.devices);
+      } else {
+        await cacheDevices(res.devices); // Just cache them anyway
+      }
+      return res;
+    } catch (err: any) {
+      if (err.message === "Failed to fetch") {
+        // Fallback to cache if network error despite navigator.onLine being true
+        return { devices: await getCachedDevices(), total: 0, page: 1, page_size: 20 };
+      }
+      throw err;
+    }
+  },
+
+  getDevice: async (id: string) => {
+    if (!navigator.onLine) {
+      const dev = await getCachedDeviceById(id);
+      if (!dev) throw new Error("Device not found in local cache");
+      return { device: dev };
+    }
+    try {
+      const res = await backendApi.getDevice(id);
+      await saveDeviceToCache(res.device);
+      return res;
+    } catch (err: any) {
+      if (err.message === "Failed to fetch") {
+        const dev = await getCachedDeviceById(id);
+        if (dev) return { device: dev };
+      }
+      throw err;
+    }
+  },
+
+  registerDevice: async (device: Partial<Device>) => {
+    if (!navigator.onLine) {
+      const tempId = "offline_" + Date.now();
+      const qr_token = "QR-" + (device.serial_number || tempId);
+      const newDev: Device = {
+        id: tempId,
+        owner_name: device.owner_name || "",
+        owner_role: device.owner_role || "student",
+        owner_phone: device.owner_phone || "",
+        brand: device.brand || "",
+        model: device.model || "",
+        color: device.color || null,
+        serial_number: device.serial_number || null,
+        qr_token,
+        status: device.status || "active",
+        image_path: device.image_path || null,
+        image_paths: device.image_paths || undefined,
+        registered_by: "offline_user",
+        registered_by_username: "offline",
+        registered_by_name: "Offline User",
+        registered_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      
+      await saveDeviceToCache(newDev);
+      await enqueueSyncOperation({
+        type: "CREATE_DEVICE",
+        payload: device,
+      });
+      
+      return { device: newDev };
+    }
+    
+    const res = await backendApi.registerDevice(device);
+    await saveDeviceToCache(res.device);
+    return res;
+  },
+
+  updateDeviceStatus: async (id: string, status: DeviceStatus) => {
+    if (!navigator.onLine) {
+      const dev = await getCachedDeviceById(id);
+      if (!dev) throw new Error("Device not found in local cache");
+      
+      dev.status = status;
+      dev.updated_at = new Date().toISOString();
+      await saveDeviceToCache(dev);
+      
+      await enqueueSyncOperation({
+        type: "UPDATE_STATUS",
+        payload: { id, status },
+      });
+      
+      return { device: dev };
+    }
+    
+    const res = await backendApi.updateDeviceStatus(id, status);
+    await saveDeviceToCache(res.device);
+    return res;
+  },
+
+  verify: async (method: "qr" | "serial" | "name", value: string) => {
+    if (!navigator.onLine) {
+      let devices: Device[] = [];
+      if (method === "qr") {
+        const d = await findDeviceByQr(value);
+        if (d) devices = [d];
+      } else if (method === "serial") {
+        devices = await findDevicesBySerial(value);
+      } else if (method === "name") {
+        devices = await searchDevicesByName(value);
+      }
+      
+      await enqueueSyncOperation({
+        type: "VERIFY",
+        payload: { method, value },
+      });
+      
+      return { devices, found: devices.length > 0, offer_register: true, offline: true } as VerifyResult;
+    }
+    
+    const res = await backendApi.verify(method, value);
+    return res;
+  }
 };

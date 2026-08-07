@@ -16,6 +16,7 @@ import ErrorBoundary from "./components/ui/ErrorBoundary";
 import DeviceList from "./pages/admin/DeviceList";
 import AuditLogs from "./pages/admin/AuditLogs";
 import UserManagement from "./pages/admin/UserManagement";
+import Assistant from "./pages/Assistant";
 
 const VerifyDevice = lazy(() => import("./pages/VerifyDevice"));
 
@@ -53,6 +54,7 @@ function AppRoutes() {
       <Route path="/admin/devices" element={<ProtectedRoute adminOnly><DeviceList /></ProtectedRoute>} />
       <Route path="/admin/audit" element={<ProtectedRoute adminOnly><AuditLogs /></ProtectedRoute>} />
       <Route path="/admin/users" element={<ProtectedRoute adminOnly><UserManagement /></ProtectedRoute>} />
+      <Route path="/admin/assistant" element={<ProtectedRoute adminOnly><Assistant /></ProtectedRoute>} />
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>

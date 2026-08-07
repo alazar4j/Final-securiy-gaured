@@ -71,7 +71,7 @@ export interface Session {
   user: AppUser;
 }
 
-export interface VerifyResult {
+export interface VerifyResult {  offline?: boolean;
   found: boolean;
   devices: Device[];
   offer_register?: boolean;

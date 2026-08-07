@@ -1,3 +1,4 @@
+import { createAssistantRouter } from "./gemini-assistant";
 import express from "express";
 import path from "path";
 import crypto from "crypto";
@@ -244,6 +245,7 @@ function addAuditLog(event: {
 
 // ============================ API Routes ============================
 const apiRouter = express.Router();
+apiRouter.use("/admin", requireAdmin, createAssistantRouter(users, devices, auditLogs));
 
 // Auth Routes
 apiRouter.post("/auth/login", (req, res) => {

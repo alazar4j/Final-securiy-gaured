@@ -5,6 +5,7 @@ import type { Device, DeviceStatus, OwnerRole } from "../../types";
 import Button from "./Button";
 import { Input, Select } from "./Input";
 import VoiceInput from "./VoiceInput";
+import OCRScanner from "./OCRScanner";
 import ImageUpload from "./ImageUpload";
 import OptionPicker from "./OptionPicker";
 import { compressAndUploadImage } from "../../lib/imageUpload";
@@ -173,8 +174,9 @@ export default function DeviceForm({ onSubmit, submitLabel, initial, presetSeria
               placeholder={t("placeholders.serial")}
               hint={t("common.optional")}
             />
-            <div className="pt-1">
+            <div className="pt-1 flex items-center gap-2">
               <VoiceInput field="serial_number" label={t("register.voiceInput")} value={form.serial_number} onChange={(v) => set("serial_number", v)} />
+              <OCRScanner value={form.serial_number} onChange={(v) => set("serial_number", v)} />
             </div>
           </div>
         </div>

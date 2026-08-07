@@ -5,6 +5,8 @@ import { QrCode, Hash, Search, AlertTriangle, Phone, User, Smartphone, Palette, 
 import Layout from "../components/ui/Layout";
 import BackButton from "../components/ui/BackButton";
 import QRScanner from "../components/ui/QRScanner";
+import VoiceInput from "../components/ui/VoiceInput";
+import OCRScanner from "../components/ui/OCRScanner";
 import DeviceCard from "../components/ui/DeviceCard";
 import StatusBadge from "../components/ui/StatusBadge";
 import Button from "../components/ui/Button";
@@ -129,6 +131,10 @@ export default function VerifyDevice() {
                 placeholder={t("placeholders.serial")}
                 autoFocus
               />
+              <div className="flex items-center gap-2 pt-1">
+                <VoiceInput field="serial" label={t("register.voiceInput")} value={serial} onChange={(v) => setSerial(v)} />
+                <OCRScanner value={serial} onChange={(v) => setSerial(v)} />
+              </div>
               <Button type="submit" loading={loading} fullWidth>
                 <Search className="w-4 h-4" />
                 {t("verify.lookup")}

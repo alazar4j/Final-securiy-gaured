@@ -3,10 +3,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   LayoutDashboard, Smartphone, ScanLine, Shield, LogOut, KeyRound,
-  Menu, X, Users, ScrollText, ChevronDown, AlertTriangle, Moon, Sun,
+  Menu, X, Users, ScrollText, ChevronDown, AlertTriangle, Moon, Sun, CloudOff, RefreshCw, Sparkles,
 } from "lucide-react";
 import { useAuthStore } from "../../store/auth";
 import { useThemeStore } from "../../store/theme";
+import { useSyncStatus } from "../../lib/useSyncStatus";
 import LanguageToggle from "./LanguageToggle";
 import Modal from "./Modal";
 import Button from "./Button";
@@ -20,7 +21,8 @@ export default function Layout({ children }: { children: ReactNode }) {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const { mode, toggle: toggleTheme } = useThemeStore();
-
+  const { isOnline, pendingCount } = useSyncStatus();
+  
   const isAdmin = user?.role === "admin";
 
   const navItems = [
@@ -33,6 +35,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     { to: "/admin/devices", label: t("nav.devices"), icon: Smartphone },
     { to: "/admin/audit", label: t("nav.audit"), icon: ScrollText },
     { to: "/admin/users", label: t("nav.users"), icon: Users },
+    { to: "/admin/assistant", label: "AI Assistant", icon: Sparkles },
   ];
 
   const handleLogout = async () => {
@@ -171,7 +174,23 @@ export default function Layout({ children }: { children: ReactNode }) {
               <span className="font-bold text-base text-neutral-900 dark:text-neutral-100">{t("app.name")}</span>
             </div>
             <div className="hidden lg:block" />
+            <div className="flex items-center gap-4">
+              {!isOnline && (
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-warning-50 dark:bg-warning-900/30 text-warning-700 dark:text-warning-400 text-xs font-medium">
+                  <CloudOff className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Offline Mode</span>
+                  {pendingCount > 0 && <span className="ml-1 px-1.5 py-0.5 rounded-full bg-warning-200 dark:bg-warning-800/50 text-[10px]">{pendingCount} pending</span>}
+                </div>
+              )}
+              {isOnline && pendingCount > 0 && (
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 text-xs font-medium animate-pulse">
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Syncing {pendingCount} items...</span>
+                </div>
+              )}
 
+
+            </div>
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen((o) => !o)}
